@@ -121,26 +121,27 @@ class OffsetPreview ( NSObject, GlyphsReporterProtocol ):
 			theseInstances = [i for i in thisFont.instances if i.active]
 			numberOfInstances = len(theseInstances)
 			
-			increment = 1.0 / float(numberOfInstances)
+			if numberOfInstances > 0:
+				increment = 1.0 / float(numberOfInstances)
 			
-			for i in range( numberOfInstances ):
-				thisInstance = theseInstances[i]
-				stepValue = i*increment
+				for i in range( numberOfInstances ):
+					thisInstance = theseInstances[i]
+					stepValue = i*increment
 				
-				NSColor.colorWithCalibratedRed_green_blue_alpha_( stepValue, stepValue*0.5, 1.0-stepValue, alpha ).set()
+					NSColor.colorWithCalibratedRed_green_blue_alpha_( stepValue, stepValue*0.5, 1.0-stepValue, alpha ).set()
 				
-				layerCopy = Layer.copyDecomposedLayer()
-				if layerCopy:
-					layerCopy.addExtremePoints()
-					layerCopy.addInflectionPoints()
+					layerCopy = Layer.copyDecomposedLayer()
+					if layerCopy:
+						layerCopy.addExtremePoints()
+						layerCopy.addInflectionPoints()
 
-					for thisParameter in thisInstance.customParameters:
-						args = thisParameter.value().split(";")
-						if args[0] == "GlyphsFilterOffsetCurve":
-							layerCopy = self.offsetLayer( layerCopy, float(args[1]), float(args[2]), float(args[3]), float(args[4]) )
+						for thisParameter in thisInstance.customParameters:
+							args = thisParameter.value().split(";")
+							if args[0] == "GlyphsFilterOffsetCurve":
+								layerCopy = self.offsetLayer( layerCopy, float(args[1]), float(args[2]), float(args[3]), float(args[4]) )
 
-					layerCopy.removeOverlap()
-					layerCopy.bezierPath().fill()
+						layerCopy.removeOverlap()
+						layerCopy.bezierPath().fill()
 		except Exception as e:
 			self.logToConsole( "drawBackgroundForLayer_: %s" % str(e) )
 	
