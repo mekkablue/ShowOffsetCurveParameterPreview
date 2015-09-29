@@ -137,7 +137,6 @@ class OffsetPreview ( NSObject, GlyphsReporterProtocol ):
 
 						for thisParameter in thisInstance.customParameters:
 							args = str(thisParameter.value).split(";")
-							print args
 							if "OffsetCurve" in args[0] and len(args) > 4:
 								layerCopy = self.offsetLayer( layerCopy, float(args[1]), float(args[2]), float(args[3]), float(args[4]) )
 
