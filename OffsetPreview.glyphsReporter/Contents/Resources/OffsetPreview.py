@@ -136,12 +136,15 @@ class OffsetPreview ( NSObject, GlyphsReporterProtocol ):
 						layerCopy.addInflectionPoints()
 
 						for thisParameter in thisInstance.customParameters:
-							args = thisParameter.value().split(";")
-							if args[0] == "GlyphsFilterOffsetCurve":
+							args = str(thisParameter.value).split(";")
+							print args
+							if "OffsetCurve" in args[0] and len(args) > 4:
 								layerCopy = self.offsetLayer( layerCopy, float(args[1]), float(args[2]), float(args[3]), float(args[4]) )
 
 						layerCopy.removeOverlap()
-						layerCopy.bezierPath().fill()
+						layerCopyBezierPath = layerCopy.bezierPath()
+						if layerCopyBezierPath:
+							layerCopyBezierPath.fill()
 		except Exception as e:
 			self.logToConsole( "drawBackgroundForLayer_: %s" % str(e) )
 	
@@ -172,12 +175,12 @@ class OffsetPreview ( NSObject, GlyphsReporterProtocol ):
 	
 	def needsExtraMainOutlineDrawingForInactiveLayer_( self, Layer ):
 		"""
-		Whatever you draw here will be displayed in the Preview at the bottom.
-		Remove the method or return True if you want to leave the Preview untouched.
-		Return True to leave the Preview as it is and draw on top of it.
-		Return False to disable the Preview and draw your own.
-		In that case, don't forget to add Bezier methods like in drawForegroundForLayer_(),
-		otherwise users will get an empty Preview.
+		Decides whether inactive glyphs in Edit View and glyphs in Preview should be drawn
+		by Glyphs (‘the main outline drawing’).
+		Return True (or remove the method) to let Glyphs draw the main outline.
+		Return False to prevent Glyphs from drawing the glyph (the main outline 
+		drawing), which is probably what you want if you are drawing the glyph
+		yourself in self.drawBackgroundForInactiveLayer_().
 		"""
 		return True
 	
