@@ -98,7 +98,14 @@ class OffsetPreview ( NSObject, GlyphsReporterProtocol ):
 			pass
 		except Exception as e:
 			self.logToConsole( "drawForegroundForLayer_: %s" % str(e) )
-	
+
+	def bezierPathComp( self, thisPath ):
+		"""Compatibility method for bezierPath before v2.3."""
+		try:
+			return thisPath.bezierPath() # until v2.2
+		except Exception as e:
+			return thisPath.bezierPath # v2.3+
+
 	def offsetLayer( self, thisLayer, x, y, stroke, position ):
 		try:
 			if self.appVersion.startswith("2."):
@@ -141,7 +148,7 @@ class OffsetPreview ( NSObject, GlyphsReporterProtocol ):
 								layerCopy = self.offsetLayer( layerCopy, float(args[1]), float(args[2]), float(args[3]), float(args[4]) )
 
 						layerCopy.removeOverlap()
-						layerCopyBezierPath = layerCopy.bezierPath()
+						layerCopyBezierPath = self.bezierPathComp(layerCopy)
 						if layerCopyBezierPath:
 							layerCopyBezierPath.fill()
 		except Exception as e:
