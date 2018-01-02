@@ -2,16 +2,11 @@
 # encoding: utf-8
 
 import objc
-from Foundation import *
-from AppKit import *
-import sys, os, re
-
-MainBundle = NSBundle.mainBundle()
-path = MainBundle.bundlePath() + "/Contents/Scripts"
-if not path in sys.path:
-	sys.path.append( path )
-
 import GlyphsApp
+from GlyphsApp.plugins import *
+# from Foundation import *
+# from AppKit import *
+import sys, os, re
 
 GlyphsReporterProtocol = objc.protocolNamed( "GlyphsReporter" )
 
@@ -23,7 +18,7 @@ class OffsetPreview ( NSObject, GlyphsReporterProtocol ):
 		"""
 		try:
 			#Bundle = NSBundle.bundleForClass_( NSClassFromString( self.className() ));
-			self.appVersion = NSBundle.bundleForClass_(GSMenu).infoDictionary().objectForKey_("CFBundleShortVersionString")
+			self.appVersion = NSBundle.mainBundle().infoDictionary().objectForKey_("CFBundleShortVersionString")
 			self.offsetPathFilter = NSClassFromString("GlyphsFilterOffsetCurve")
 			return self
 		except Exception as e:
