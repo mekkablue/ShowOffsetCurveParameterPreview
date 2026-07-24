@@ -3,10 +3,8 @@
 
 import objc
 import GlyphsApp
-from GlyphsApp.plugins import *
-# from Foundation import *
-# from AppKit import *
-import sys, os, re
+from Foundation import NSObject, NSBundle, NSClassFromString, NSUserDefaults, NSLog
+from AppKit import NSColor, NSFont, NSFontAttributeName, NSForegroundColorAttributeName, NSAttributedString
 
 GlyphsReporterProtocol = objc.protocolNamed( "GlyphsReporter" )
 
